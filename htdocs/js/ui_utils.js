@@ -62,11 +62,32 @@ ui_utils.disconnection_error = function(msg, label) {
 };
 
 ui_utils.string_error = function(msg) {
-    var button = $("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+    var close_button = $("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>");
+    var copy_button = $("<button type='button' class='copy-error-button'></button>")
+        .append($("<i class='icon-copy'></i>".click(function() {
+            var copyClip = $('<input>').val(msg).appendTo('body').select();
+            document.execCommand('copy');
+        })));
+
     var result = $("<div class='alert alert-danger alert-dismissable'></div>");
     // var text = $("<span></span>");
 
-    result.append(button);
+    result.append(close_button);
+    result.append(copy_button);
+    var trace_start = msg.indexOf('R trace:'), details;
+    if(trace_start !== -1) {
+        result.append($("<div></div>").text(msg.slice(0, trace_start)));
+        msg = msg.slice(trace_start);
+        details = $("<div style='display: none'></div>");
+        var shown = false;
+        result.append($("<div style='padding-left: 1em'></div>").append($("<a class='expander'>expand</a>").click(function() {
+            shown = !shown;
+            details.toggle(shown);
+            $(this).text(shown ? 'collapse' : 'expand');
+        })));
+        result.append(details);
+    }
+    else details = result;
     var text = _.map(msg.split("\n"), function(str) {
         // poor-man replacing 4 spaces with indent
         var el = $("<div></div>").text(str), match;
@@ -77,7 +98,7 @@ ui_utils.string_error = function(msg) {
         }
         return el;
     });
-    result.append(text);
+    details.append(text);
     return result;
 };
 

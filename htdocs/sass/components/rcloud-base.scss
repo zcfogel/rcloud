@@ -221,6 +221,25 @@ pre.offscreen {
     border: 0;
 }
 
+.alert .expander {
+    text-decoration: underline;
+    color: #b94aee;
+    cursor: pointer;
+}
+
+.alert .copy-error-button {
+    float: right;
+    position: relative;
+    top: 20px;
+    right: -21px;
+    color: inherit;
+    opacity: 0.5;
+    padding: 0;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+}
+
 .cell-status {
     position: relative;
     width: 100%;
